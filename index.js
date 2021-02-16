@@ -38,7 +38,7 @@ function timeout(promise, timeoutMillis) {
     return v;
   }, function(err) {
     clearTimeout(timeoutId);
-    if(err instanceof TimeoutError) throw err;
+    throw err;
   });
 }
 exports.timeout = timeout;
