@@ -5,10 +5,10 @@
  * Exception indicating that the timeout expired.
  */
 class TimeoutError extends Error {
-  constructor(timeoutMillis) {
+  constructor(timeoutMillis,needStack) {
     super(`Promise did not resolve within ${timeoutMillis}ms`);
     this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
+    if(needStack) Error.captureStackTrace(this, this.constructor);
   }
 }
 exports.TimeoutError = TimeoutError;
@@ -22,9 +22,9 @@ exports.TimeoutError = TimeoutError;
  * @returns {Promise} Either resolves/rejects with `promise`, or rejects with
  *                   `TimeoutError`, whichever settles first.
  */
-function timeout(promise, timeoutMillis) {
+function timeout(promise, timeoutMillis, needStack=false) {
   let timeoutId;
-  const error = new TimeoutError(timeoutMillis);
+  const error = new TimeoutError(timeoutMillis,needStack);
 
   return Promise.race([
     promise,
